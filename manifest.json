@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Bloxd.io JP Chat Translator",
+  "version": "1.2",
+  "description": "Translate Bloxd.io chat messages.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://translate.googleapis.com/*"],
+  "action": {
+    "default_title": "Bloxd Translator"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://bloxd.io/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
