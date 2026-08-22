@@ -19,7 +19,6 @@ ON/OFF の切り替えも可能で、アイコンに ON（緑） / OFF（赤 が
 
 - ON は緑、OFF は赤でアイコンに表示
 
-- bloxd.io の DOM を壊さない安全設計
 
 
 
@@ -32,9 +31,9 @@ ON/OFF の切り替えも可能で、アイコンに ON（緑） / OFF（赤 が
 
 1. このリポジトリのリリースをおしてそこからzipをダウンロード 
 
-2. Chrome で `chrome://extensions/` を開く  
+2. zipを解凍する
 
-3. 右上の デベロッパーモード を ON  
+3. Chronium系ブラウザ（chrome、edge、braveなど） で `chrome://extensions/` を開いてデペロッパーモードをオン 
 
 4. そこにファイルをドラッグします  
 
