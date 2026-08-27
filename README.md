@@ -2,24 +2,16 @@
 仕様変更で動かなくなる場合があります。
 Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 
-ON/OFF の切り替えも可能で、アイコンに ON（緑） / OFF（赤 が表示されます。
+ON/OFF の切り替えも可能です。
 
 対応ブラウザ:chromeなどのchronium系ブラウザ
 動作確認はchrome、brave、vivaldiでしております。
 
  主な機能
 
-
-
-　Bloxd.io のチャットメッセージを自動で日本語に翻訳
-
-- Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください。
+Bloxd.io のチャットメッセージを自動で日本語に翻訳
 
 - 拡張アイコンをクリックして \*\*ON/OFF 切り替え\*\*
-
-- ON は緑、OFF は赤でアイコンに表示
-
-
 
 
 ---
@@ -39,34 +31,21 @@ ON/OFF の切り替えも可能で、アイコンに ON（緑） / OFF（赤 が
 
 5. そうすると読み込まれます。
 
+---注意事項----
 
+ Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください。
 
-  使用している技術
+---  使用している技術
 
  Manifest V3
 
- Chrome Extensions API  
+- Chrome Extensions API  
 
-; - `chrome.action`
-
-; - `chrome.storage`
-
-; - `chrome.runtime`
 
 - Google Translate API
 
 - MutationObserver によるチャット監視
 
-
- 🔐 ON/OFF の仕組み
-
-
-
-\- `chrome.action.onClicked` で状態を切り替え
-
-\- `chrome.storage.local` に保存
-
-\- content.js が状態を読み取って翻訳処理を実行/停止
 
 \## 📜 ライセンス
 MIT License
