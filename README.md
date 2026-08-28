@@ -2,7 +2,12 @@
 仕様変更で動かなくなる場合があります。
 Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 
+
+WANTED!｛もしこのソフトウェアで損じた損害を作者は負いません。｝｛The author will not be responsible for any damage caused by this software.｝
+
 個人が趣味で開発しているため飽きたら開発終了します。
+
+
 
 
 ON/OFF の切り替えも可能です。
