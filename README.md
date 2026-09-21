@@ -1,16 +1,12 @@
 ># -Bloxd.io-Chat-Translator
->仕様変更で動かなくなる場合があります。
->Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
+仕様変更で動かなくなる場合があります。
+Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 
 > [!WARNING]
 > もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
-個人が趣味で開発しているため飽きたら開発終了します。
+> Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.
+> 個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。
 
-
-
-
-
->ON/OFF の切り替えも可能です。
 
 >対応ブラウザ:chromeなどのchronium系ブラウザ
 >動作確認はchrome、brave、vivaldiでしております。
@@ -20,9 +16,7 @@
 >Bloxd.io のチャットメッセージを自動で日本語に翻訳
 
 ---
-
-
-  >インストール方法（開発者モード）
+ >インストール方法（開発者モード）
 
 
 >1. このリポジトリのリリースをおしてそこからzipをダウンロード 
