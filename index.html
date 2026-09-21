@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja">
+<html lang="ja" data-lang="ja" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
             --bg: #000; --txt: #f5f5f7; --sub: #86868b; --border: rgba(255,255,255,0.1);
             --glass: rgba(22,22,23,0.5); --shadow: rgba(0,0,0,0.4);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg); color: var(--txt); line-height: 1.6; -webkit-font-smoothing: antialiased;
@@ -25,28 +25,22 @@
         }
         .nav-c { max-width: 1024px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 12px; }
         .nav-btns { display: flex; gap: 8px; }
-        .toggle { background: var(--glass); border: 1px solid var(--border); color: var(--txt); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; }
+        .toggle { background: var(--glass); border: 1px solid var(--border); color: var(--txt); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; transition: background 0.2s; }
         .wrap { max-width: 800px; margin: 90px auto 40px; padding: 0 20px; animation: up 0.6s ease-out; }
-        
-        /* 最新バージョンバナー */
         .hero { text-align: center; margin-bottom: 30px; }
         .v-badge { display: inline-block; background: var(--border); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--cta); }
         .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
         .hero p { color: var(--sub); font-size: 16px; max-width: 600px; margin: 0 auto; }
-        
         .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); box-shadow: 0 20px 40px var(--shadow); border-radius: 24px; padding: 30px; }
         .slide-box { width: 100%; height: 320px; background: rgba(0,0,0,0.02); border-radius: 16px; margin: 20px 0; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); position: relative; }
         .slide-box img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; }
         .slide-box img.active { opacity: 1; z-index: 2; }
-        
         .btn { background: var(--cta); color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 22px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,113,227,0.2); border: none; cursor: pointer; }
         .btn:hover { transform: scale(1.02); }
         .warn { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); padding: 15px; border-radius: 14px; margin: 20px 0; font-size: 13px; }
         h2 { font-size: 20px; margin: 25px 0 10px; border-left: 3px solid var(--cta); padding-left: 8px; }
         ul, ol { padding-left: 20px; font-size: 14px; }
         li { margin-bottom: 6px; }
-        
-        /* 💬 ポップアップスタイル */
         #pop-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
         .pop-box { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 35px 25px 25px; border-radius: 20px; max-width: 400px; width: 100%; text-align: center; position: relative; animation: up 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
         .pop-close { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--sub); font-weight: 300; line-height: 1; }
@@ -55,13 +49,11 @@
         .pop-box p { font-size: 14px; color: var(--txt); margin-bottom: 15px; }
         @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 🌐 完璧な言語切り替え（表示・非表示の完全分離） */
         html[data-lang="ja"] .lang-en { display: none !important; }
         html[data-lang="en"] .lang-ja { display: none !important; }
     </style>
 </head>
 <body>
-    <!-- 忠告ポップアップ -->
     <div id="pop-overlay">
         <div class="pop-box">
             <button class="pop-close" id="popX">&times;</button>
@@ -84,7 +76,6 @@
 
     <div class="wrap">
         <section class="hero">
-            <!-- 👑 最上部に大きく固定配置される最新バージョンバナー -->
             <div class="v-badge" id="versionBadge">Latest: 1.3.2.1</div>
             <h1>Bloxd Translator</h1>
             <p class="lang-ja">Google翻訳が対応するほぼ全言語から、日本語・英語・韓国語・中国語・フランス語・ドイツ語・スペイン語・ロシア語へ翻訳するChrome拡張機能</p>
@@ -133,7 +124,6 @@
     </div>
 
     <script>
-        // GitHub API自動更新（文言混ざりバグを徹底ガード）
         async function fetchLatestVersion() {
             try {
                 const res = await fetch('https://github.com');
@@ -147,5 +137,10 @@
             } catch (e) {}
         }
         fetchLatestVersion();
-        if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){document.getElementById('pop-overlay').style.display = 'flex';}document.getElementById('popX').addEventListener('click', () => {document.getElementById('pop-overlay').style.display = 'none';});const imgs = document.querySelectorAll('#slideshow img');let idx = 0;if(imgs.length > 1) {setInterval(() => {imgs[idx].classList.remove('active');idx = (idx + 1) % imgs.length;imgs[idx].classList.add('active');}, 3000);}const langBtn = document.getElementById('langBtn');const setLang = (l) => {document.documentElement.setAttribute('data-lang', l);langBtn.textContent = l === 'en' ? '日本語' : 'English';localStorage.setItem('lang', l);}langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));setLang(localStorage.getItem('lang') || 'ja');const modeBtn = document.getElementById('modeBtn');const setMode = (t) => {document.documentElement.setAttribute('data-theme', t);modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';localStorage.setItem('theme', t);}modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 
+        if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){
+            document.getElementById('pop-overlay').style.display = 'flex';
+        }
+        
+        document.getElementById('popX').addEventListener('click', () => {
+            document.getElementById('pop-overlay').style.display = 'none';});const imgs = document.querySelectorAll('#slideshow img');let idx = 0;if(imgs.length > 1) {setInterval(() => {imgs[idx].classList.remove('active');idx = (idx + 1) % imgs.length;imgs[idx].classList.add('active');}, 3000);}const langBtn = document.getElementById('langBtn');const setLang = (l) => {document.documentElement.setAttribute('data-lang', l);langBtn.textContent = l === 'en' ? '日本語' : 'English';localStorage.setItem('lang', l);}langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));setLang(localStorage.getItem('lang') || 'ja');const modeBtn = document.getElementById('modeBtn');const setMode = (t) => {document.documentElement.setAttribute('data-theme', t);modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';localStorage.setItem('theme', t);}modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
