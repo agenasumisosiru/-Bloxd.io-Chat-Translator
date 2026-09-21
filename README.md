@@ -2,7 +2,7 @@
 仕様変更で動かなくなる場合があります。
 Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 
-[!WARNING]｛もしこのソフトウェアで損じた損害を作者は負いません。｝｛The author will not be responsible for any damage caused by this software.｝
+[!WARNING]もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
 
 個人が趣味で開発しているため飽きたら開発終了します。
 
@@ -24,7 +24,6 @@ Bloxd.io のチャットメッセージを自動で日本語に翻訳
   インストール方法（開発者モード）
 
 
-
 1. このリポジトリのリリースをおしてそこからzipをダウンロード 
 
 2. zipを解凍する
@@ -37,21 +36,9 @@ Bloxd.io のチャットメッセージを自動で日本語に翻訳
 
 ---注意事項----
 
- Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください。
+ Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください
 
----  使用している技術
-
- Manifest V3
-
-- Chrome Extensions API  
-
-
-- Google Translate API
-
-- MutationObserver によるチャット監視
-
-
-\## 📜 ライセンス
+ライセンス
 MIT License
 
 Copyright (c) 2026 agenasunomisosiru
@@ -74,24 +61,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN  
 THE SOFTWARE.
 
-
-
-
-
-
 なお何か問題があった場合はgithubもしくはメールからご連絡ください
 
 
-
-\---
-
-
-
 \## 作者
-
-
-
-あげなすのみそ汁
+AgenasuNoMisosiru
 
 tokumei729@protonmail.com
 
