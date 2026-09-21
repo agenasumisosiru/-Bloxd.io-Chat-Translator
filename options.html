@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <title>翻訳設定</title>
@@ -25,13 +25,21 @@
         </select>
       </div>
 
+      <section class="row update-panel" aria-labelledby="updateHeading">
+        <h3 id="updateHeading">アップデート</h3>
+        <p id="updateStatus">バージョンを確認中...</p>
+        <div class="buttons">
+          <button id="checkUpdate" class="glass-btn">今すぐ確認</button>
+          <button id="openRelease" class="glass-btn" hidden>更新ページを開く</button>
+        </div>
+      </section>
+
       <div class="row switches">
         <label class="switch">
           <input type="checkbox" id="debugMode">
           <span class="slider"></span>
           デバッグモード
         </label>
-
         <label class="switch">
           <input type="checkbox" id="pauseProcessing">
           <span class="slider"></span>
@@ -62,7 +70,6 @@
       <div id="logs" class="glass-log" aria-live="polite">(ログは空です)</div>
     </div>
   </div>
-
   <script src="options.js"></script>
 </body>
 </html>
