@@ -1,12 +1,14 @@
 // background.js - Bloxd Translator (service worker)
-// Updated: translation cache, throttle, exponential backoff, debug log append
+// v1.4.0: translation cache, throttling, backoff, debug logs, startup update notifications
 
 let DEBUG = false;
-
-// persistent-ish state (service worker may restart)
-const TRANSLATION_CACHE_TTL = 1000 * 60 * 10; // 10 minutes
+const TRANSLATION_CACHE_TTL = 1000 * 60 * 10;
 const BACKOFF_BASE_MS = 1000;
 const BACKOFF_MAX_MS = 1000 * 60;
+const REPO = "agenasumisosiru/-Bloxd.io-Chat-Translator";
+const RELEASES_URL = `https://github.com/${REPO}/releases/latest`;
+const UPDATE_API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
+const UPDATE_NOTIFICATION_ID = "bloxd-translator-update";
 
 let lastRequestAt = 0;
 let backoffUntil = 0;
@@ -15,7 +17,7 @@ let backoffMultiplier = 1;
 async function initBadgeAndDebug() {
   try {
     const res = await chrome.storage.local.get(["enabled", "debugMode"]);
-    const enabled = (res && typeof res.enabled !== "undefined") ? res.enabled : true;
+    const enabled = typeof res.enabled !== "undefined" ? res.enabled : true;
     DEBUG = !!res.debugMode;
     updateBadge(enabled);
   } catch (e) {
@@ -34,25 +36,99 @@ function updateBadge(state) {
   }
 }
 
-chrome.runtime.onInstalled.addListener(initBadgeAndDebug);
-chrome.runtime.onStartup.addListener(initBadgeAndDebug);
+function parseVersion(version) {
+  const match = String(version || "").replace(/^v/i, "").match(/^(\d+)(?:\.(\d+))?(?:\.(\d+))?(?:\.(\d+))?/);
+  return match ? match.slice(1).map(part => Number(part || 0)) : [0, 0, 0, 0];
+}
+
+function isNewerVersion(remote, local) {
+  const a = parseVersion(remote);
+  const b = parseVersion(local);
+  for (let i = 0; i < 4; i += 1) {
+    if (a[i] !== b[i]) return a[i] > b[i];
+  }
+  return false;
+}
+
+async function checkForUpdates({ notify = true } = {}) {
+  try {
+    const localVersion = chrome.runtime.getManifest().version;
+    const response = await fetch(UPDATE_API_URL, {
+      headers: { Accept: "application/vnd.github+json" },
+      cache: "no-store"
+    });
+    if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+
+    const release = await response.json();
+    const remoteVersion = String(release.tag_name || "").replace(/^v/i, "");
+    if (!remoteVersion) throw new Error("Release has no tag_name");
+
+    const updateAvailable = isNewerVersion(remoteVersion, localVersion);
+    await chrome.storage.local.set({
+      updateAvailable,
+      currentVersion: localVersion,
+      latestVersion: remoteVersion,
+      latestReleaseUrl: release.html_url || RELEASES_URL,
+      latestReleaseCheckedAt: Date.now()
+    });
+
+    if (!notify || !updateAvailable) return { ok: true, updateAvailable: false };
+
+    const stored = await chrome.storage.local.get(["lastNotifiedVersion"]);
+    if (stored.lastNotifiedVersion === remoteVersion) return { ok: true, updateAvailable: true };
+
+    await chrome.notifications.create(UPDATE_NOTIFICATION_ID, {
+      type: "basic",
+      iconUrl: "png1.png",
+      title: "Bloxd Translator の更新があります",
+      message: `v${remoteVersion} が利用できます。クリックして更新方法を確認してください。`,
+      priority: 2,
+      requireInteraction: true
+    });
+    await chrome.storage.local.set({ lastNotifiedVersion: remoteVersion });
+    return { ok: true, updateAvailable: true };
+  } catch (error) {
+    await appendDebugLog(`[update] check failed: ${error && error.message}`);
+    return { ok: false, error: error && error.message };
+  }
+}
+
+chrome.notifications.onClicked.addListener(async (notificationId) => {
+  if (notificationId !== UPDATE_NOTIFICATION_ID) return;
+  const stored = await chrome.storage.local.get(["latestReleaseUrl"]);
+  chrome.tabs.create({ url: stored.latestReleaseUrl || RELEASES_URL });
+  chrome.notifications.clear(notificationId);
+});
+
+chrome.notifications.onClosed.addListener((notificationId) => {
+  if (notificationId === UPDATE_NOTIFICATION_ID) chrome.notifications.clear(notificationId);
+});
+
+chrome.runtime.onInstalled.addListener(async () => {
+  await initBadgeAndDebug();
+  await checkForUpdates({ notify: false });
+});
+
+// Browser startup: check once whenever the browser starts.
+chrome.runtime.onStartup.addListener(async () => {
+  await initBadgeAndDebug();
+  await checkForUpdates({ notify: true });
+});
+
 initBadgeAndDebug();
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "local") {
-    if (changes.enabled) updateBadge(changes.enabled.newValue);
-    if (changes.debugMode) DEBUG = !!changes.debugMode.newValue;
-  }
+  if (area !== "local") return;
+  if (changes.enabled) updateBadge(changes.enabled.newValue);
+  if (changes.debugMode) DEBUG = !!changes.debugMode.newValue;
 });
 
-// debug log append (keeps last N entries)
 async function appendDebugLog(entry) {
   try {
     if (!DEBUG) return;
     const res = await chrome.storage.local.get(["debugLogs"]);
     const logs = Array.isArray(res.debugLogs) ? res.debugLogs : [];
-    const ts = new Date().toISOString();
-    logs.push(`${ts} ${entry}`);
+    logs.push(`${new Date().toISOString()} ${entry}`);
     if (logs.length > 2000) logs.splice(0, logs.length - 2000);
     await chrome.storage.local.set({ debugLogs: logs });
   } catch (e) {
@@ -64,6 +140,7 @@ async function getCache() {
   const res = await chrome.storage.local.get(["translationCache"]);
   return res.translationCache || {};
 }
+
 async function setCache(cache) {
   await chrome.storage.local.set({ translationCache: cache });
 }
@@ -71,78 +148,76 @@ async function setCache(cache) {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg) return;
 
+  if (msg.type === "checkForUpdates") {
+    checkForUpdates({ notify: false }).then(sendResponse);
+    return true;
+  }
+
   if (msg.type === "appendDebugLog") {
-    appendDebugLog(msg.text).then(() => sendResponse && sendResponse({ ok: true })).catch(() => sendResponse && sendResponse({ ok: false }));
+    appendDebugLog(msg.text).then(() => sendResponse({ ok: true })).catch(() => sendResponse({ ok: false }));
     return true;
   }
 
-  if (msg.type === "translate") {
-    (async () => {
-      try {
-        const now = Date.now();
-        if (now < backoffUntil) {
-          sendResponse({ ok: false, text: null, error: "backoff" });
-          return;
-        }
+  if (msg.type !== "translate") return;
 
-        const MIN_INTERVAL = (await chrome.storage.local.get(["throttleMs"])).throttleMs || 80;
-        const since = now - lastRequestAt;
-        if (since < MIN_INTERVAL) {
-          await new Promise(r => setTimeout(r, MIN_INTERVAL - since));
-        }
-        lastRequestAt = Date.now();
-
-        const cache = await getCache();
-        const targetLangRes = await chrome.storage.local.get(["targetLang"]);
-        const tl = targetLangRes.targetLang || "ja";
-        const key = `${msg.text}||${tl}`;
-        const entry = cache[key];
-        if (entry && (Date.now() - entry.ts) < TRANSLATION_CACHE_TTL) {
-          sendResponse({ ok: true, text: entry.text, cached: true });
-          return;
-        }
-
-        const sl = "auto";
-        const q = encodeURIComponent(msg.text || "");
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&dt=bd&dj=1&q=${q}`;
-
-        const controller = new AbortController();
-        const TIMEOUT_MS = 8000;
-        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-        const r = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
-
-        const contentType = r.headers.get("content-type") || "";
-        if (!r.ok || contentType.includes("text/html")) {
-          if (r.status === 429) {
-            backoffMultiplier = Math.min((backoffMultiplier || 1) * 2, Math.floor(BACKOFF_MAX_MS / BACKOFF_BASE_MS));
-            backoffUntil = Date.now() + BACKOFF_BASE_MS * backoffMultiplier;
-            await appendDebugLog(`[background] 429 received, backoffUntil=${new Date(backoffUntil).toISOString()}`);
-          } else {
-            await appendDebugLog(`[background] translate fetch error: ${r.status} ${contentType}`);
-          }
-          sendResponse({ ok: false, text: null, status: r.status, contentType });
-          return;
-        }
-
-        const data = await r.json();
-        const translated = (data && data.sentences) ? data.sentences.map(s => s.trans || "").join("") : null;
-        if (translated) {
-          cache[key] = { text: translated, ts: Date.now() };
-          await setCache(cache);
-          backoffMultiplier = 1;
-          backoffUntil = 0;
-          await appendDebugLog(`[background] translated: ${translated}`);
-          sendResponse({ ok: true, text: translated });
-        } else {
-          sendResponse({ ok: false, text: null });
-        }
-      } catch (e) {
-        await appendDebugLog(`[background] translate error: ${e && e.message}`);
-        sendResponse({ ok: false, text: null, error: e && e.message });
+  (async () => {
+    try {
+      const now = Date.now();
+      if (now < backoffUntil) {
+        sendResponse({ ok: false, text: null, error: "backoff" });
+        return;
       }
-    })();
-    return true;
-  }
+
+      const settings = await chrome.storage.local.get(["throttleMs", "targetLang"]);
+      const minInterval = settings.throttleMs || 80;
+      const since = now - lastRequestAt;
+      if (since < minInterval) await new Promise(resolve => setTimeout(resolve, minInterval - since));
+      lastRequestAt = Date.now();
+
+      const cache = await getCache();
+      const targetLang = settings.targetLang || "ja";
+      const key = `${msg.text}||${targetLang}`;
+      const entry = cache[key];
+      if (entry && Date.now() - entry.ts < TRANSLATION_CACHE_TTL) {
+        sendResponse({ ok: true, text: entry.text, cached: true });
+        return;
+      }
+
+      const q = encodeURIComponent(msg.text || "");
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&dt=bd&dj=1&q=${q}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      const contentType = response.headers.get("content-type") || "";
+
+      if (!response.ok || contentType.includes("text/html")) {
+        if (response.status === 429) {
+          backoffMultiplier = Math.min(backoffMultiplier * 2, BACKOFF_MAX_MS / BACKOFF_BASE_MS);
+          backoffUntil = Date.now() + BACKOFF_BASE_MS * backoffMultiplier;
+        }
+        sendResponse({ ok: false, text: null, status: response.status, contentType });
+        return;
+      }
+
+      const data = await response.json();
+      const translated = data && data.sentences ? data.sentences.map(sentence => sentence.trans || "").join("") : null;
+      if (!translated) {
+        sendResponse({ ok: false, text: null });
+        return;
+      }
+
+      cache[key] = { text: translated, ts: Date.now() };
+      await setCache(cache);
+      backoffMultiplier = 1;
+      backoffUntil = 0;
+      await appendDebugLog(`[background] translated: ${translated}`);
+      sendResponse({ ok: true, text: translated });
+    } catch (error) {
+      await appendDebugLog(`[background] translate error: ${error && error.message}`);
+      sendResponse({ ok: false, text: null, error: error && error.message });
+    }
+  })();
+
+  return true;
 });
