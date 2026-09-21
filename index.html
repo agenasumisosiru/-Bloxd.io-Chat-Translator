@@ -27,36 +27,44 @@
         .nav-btns { display: flex; gap: 8px; }
         .toggle { background: var(--glass); border: 1px solid var(--border); color: var(--txt); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; }
         .wrap { max-width: 800px; margin: 90px auto 40px; padding: 0 20px; animation: up 0.6s ease-out; }
-        .hero { text-align: center; margin-bottom: 30px; }
-        .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
-        .hero p { color: var(--sub); font-size: 18px; }
-        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); box-shadow: 0 20px 40px var(--shadow); border-radius: 24px; padding: 30px; }
         
+        .hero { text-align: center; margin-bottom: 30px; }
+        .v-badge { display: inline-block; background: var(--border); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--cta); }
+        .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
+        .hero p { color: var(--sub); font-size: 16px; max-width: 600px; margin: 0 auto; }
+        
+        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); box-shadow: 0 20px 40px var(--shadow); border-radius: 24px; padding: 30px; }
         .slide-box { width: 100%; height: 320px; background: rgba(0,0,0,0.02); border-radius: 16px; margin: 20px 0; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); position: relative; }
         .slide-box img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; }
         .slide-box img.active { opacity: 1; z-index: 2; }
         
-        .btn { background: var(--cta); color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 22px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,113,227,0.2); }
+        .btn { background: var(--cta); color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 22px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,113,227,0.2); border: none; cursor: pointer; }
         .btn:hover { transform: scale(1.02); }
         .warn { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); padding: 15px; border-radius: 14px; margin: 20px 0; font-size: 13px; }
         h2 { font-size: 20px; margin: 25px 0 10px; border-left: 3px solid var(--cta); padding-left: 8px; }
         ul, ol { padding-left: 20px; font-size: 14px; }
         li { margin-bottom: 6px; }
         
-        #blocker { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; color: #fff; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        #blocker h1 { font-size: 28px; margin-bottom: 10px; color: #ff453a; }
+        #pop-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
+        .pop-box { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 35px 25px 25px; border-radius: 20px; max-width: 400px; width: 100%; text-align: center; position: relative; animation: up 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .pop-close { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--sub); font-weight: 300; line-height: 1; }
+        .pop-close:hover { color: #ff453a; }
+        .pop-box h3 { font-size: 19px; margin-bottom: 10px; color: #ff453a; font-weight: 700; }
+        .pop-box p { font-size: 14px; color: var(--txt); margin-bottom: 15px; }
         @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 言語切り替え用非表示スタイル */
         [data-lang="en"] .lang-ja, [data-lang="ja"] .lang-en { display: none; }
     </style>
 </head>
 <body>
-    <div id="blocker">
-        <h1 class="lang-ja">PC専用ページ</h1>
-        <h1 class="lang-en">PC Only</h1>
-        <p class="lang-ja">この拡張機能はPCブラウザ専用です。<br>WindowsまたはMacからアクセスしてください。</p>
-        <p class="lang-en">This extension is for PC browsers only.<br>Please access from Windows or Mac.</p>
+    <div id="pop-overlay">
+        <div class="pop-box">
+            <button class="pop-close" id="popX">&times;</button>
+            <h3 class="lang-ja">⚠️ PC専用の機能です</h3>
+            <h3 class="lang-en">⚠️ Desktop PC Only</h3>
+            <p class="lang-ja">この拡張機能はPCブラウザ専用（Chromium系）です。導入の際はWindowsまたはMacからアクセスしてください。</p>
+            <p class="lang-en">This extension is for desktop PC browsers only. Please access from Windows or Mac to install.</p>
+        </div>
     </div>
 
     <nav>
@@ -71,9 +79,10 @@
 
     <div class="wrap">
         <section class="hero">
+            <div class="v-badge">Latest: v1.3.2</div>
             <h1>Bloxd Translator</h1>
-            <p class="lang-ja">Bloxd.ioのチャットを自動で日本語に翻訳するChrome拡張機能</p>
-            <p class="lang-en">Chrome extension that automatically translates Bloxd.io chat into Japanese</p>
+            <p class="lang-ja">Google翻訳が対応するほぼ全言語から、日本語・英語・韓国語・中国語・フランス語・ドイツ語・スペイン語・ロシア語へ翻訳するChrome拡張機能</p>
+            <p class="lang-en">Chrome extension that translates from nearly all Google-supported languages into Japanese, English, Korean, Chinese, French, German, Spanish, and Russian.</p>
         </section>
 
         <main class="card">
@@ -83,12 +92,12 @@
             </div>
 
             <div style="text-align: center;">
-                <a href="https://github.com" target="_blank" class="btn lang-ja">最新リリースを別タブで開く</a>
-                <a href="https://github.com" target="_blank" class="btn lang-en">Open Latest Release in New Tab</a>
+                <a href="https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases" target="_blank" class="btn lang-ja">最新リリース（v1.3.2）を別タブで開く</a>
+                <a href="https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases" target="_blank" class="btn lang-en">Open Latest Release (v1.3.2) in New Tab</a>
             </div>
 
             <div class="warn">
-                <strong style="color:#ff453a; display:block; margin-bottom:4px;" class="lang-ja">⚠️ 免責事項 (Warning)</strong>
+                <strong style="color:#ff453a; display:block; margin-bottom:4px;" class="lang-ja">⚠️ 免責事項</strong>
                 <strong style="color:#ff453a; display:block; margin-bottom:4px;" class="lang-en">⚠️ Warning</strong>
                 <span class="lang-ja">個人開発の趣味プロジェクトのため、仕様変更による動作停止やメンテナンス終了の可能性があります。本ソフトウェアの使用によって生じた損害について、作者は一切の責任を負いません。</span>
                 <span class="lang-en">Since it is developed by individuals as a hobby, development ends when it becomes difficult to maintain. The author will not be responsible for any damage caused by this software.</span>
@@ -97,14 +106,13 @@
             <h2 class="lang-ja">主な機能</h2>
             <h2 class="lang-en">Features</h2>
             <ul>
-                <li class="lang-ja">Bloxd.io 内の海外チャットを自動でリアルタイム日本語翻訳。</li>
-                <li class="lang-en">Automatically translates overseas chats in Bloxd.io into Japanese in real time.</li>
+                <li class="lang-ja">Bloxd.io内のあらゆる海外チャットを、指定した主要言語へリアルタイム翻訳。</li>
+                <li class="lang-en">Real-time translation of any overseas chat in Bloxd.io into your specified primary language.</li>
                 <li class="lang-ja">Google翻訳APIの上限により、一時的に翻訳制限がかかる場合があります。</li>
                 <li class="lang-en">Due to Google Translate API limits, translation limits may be temporarily reached.</li>
             </ul>
 
-            <h2 class="lang-ja">導入手順 (開発者モード)</h2>
-            <h2 class="lang-en">How to Install (Developer Mode)</h2>
+            <h2><span class="lang-ja">導入手順 (開発者モード)</span><span class="lang-en">How to Install (Developer Mode)</span></h2>
             <ol>
                 <li class="lang-ja">リポジトリのReleasesから <strong>.7zファイルをダウンロード</strong></li>
                 <li class="lang-en">Download the <strong>.7z file</strong> from the repository Releases</li>
@@ -119,13 +127,14 @@
     </div>
 
     <script>
-        // スマホ遮断
         if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
-            document.getElementById('blocker').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+            document.getElementById('pop-overlay').style.display = 'flex';
         }
+        
+        document.getElementById('popX').addEventListener('click', () => {
+            document.getElementById('pop-overlay').style.display = 'none';
+        });
 
-        // 3秒スライドショー
         const imgs = document.querySelectorAll('#slideshow img');
         let idx = 0;
         if(imgs.length > 1) {
@@ -136,25 +145,10 @@
             }, 3000);
         }
 
-        // 🌐 言語切り替えロジック
         const langBtn = document.getElementById('langBtn');
         const setLang = (l) => {
             document.documentElement.setAttribute('data-lang', l);
             langBtn.textContent = l === 'en' ? '日本語' : 'English';
             localStorage.setItem('lang', l);
         }
-        langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));
-        setLang(localStorage.getItem('lang') || 'ja');
-
-        // モード切り替え
-        const modeBtn = document.getElementById('modeBtn');
-        const setMode = (t) => {
-            document.documentElement.setAttribute('data-theme', t);
-            modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';
-            localStorage.setItem('theme', t);
-        }
-        modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
-        setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-    </script>
-</body>
-</html>
+        langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));setLang(localStorage.getItem('lang') || 'ja');const modeBtn = document.getElementById('modeBtn');const setMode = (t) => {document.documentElement.setAttribute('data-theme', t);modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';localStorage.setItem('theme', t);}modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
