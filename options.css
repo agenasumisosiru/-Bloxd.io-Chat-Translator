@@ -1,0 +1,209 @@
+/* ==========================================================================
+   1) 海のような明るいブルーグラデーション
+   ========================================================================== */
+:root {
+  --bg-gradient: radial-gradient(circle at 50% 30%, #4fc3ff 0%, #1e7ac7 55%, #0a3d7a 100%);
+  --base-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Liquid Glass */
+  --panel-bg: rgba(255, 255, 255, 0.12);
+  --panel-blur: 42px;
+  --panel-saturate: 240%;
+  --panel-border: rgba(255, 255, 255, 0.28);
+  --panel-radius: 26px;
+
+  --control-bg: rgba(255, 255, 255, 0.14);
+  --control-bg-hover: rgba(255, 255, 255, 0.24);
+  --control-radius: 12px;
+
+  --text-color: #ffffff;
+  --text-dim: rgba(255, 255, 255, 0.75);
+
+  --accent-color: #009dff;
+  --accent-color-hover: #1aaaff;
+}
+
+/* ==========================================================================
+   2) ベース
+   ========================================================================== */
+body {
+  margin: 0;
+  padding: 40px 20px;
+  font-family: var(--base-font);
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   3) メインパネル（左右を独立させて重なり防止）
+   ========================================================================== */
+.glass-panel.wide {
+  width: 980px;
+  padding: 32px;
+  border-radius: var(--panel-radius);
+  background: var(--panel-bg);
+  backdrop-filter: blur(var(--panel-blur)) saturate(var(--panel-saturate));
+  -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(var(--panel-saturate));
+  border: 1px solid var(--panel-border);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.15),
+    0 30px 70px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0px rgba(255, 255, 255, 0.3);
+
+  display: grid;
+  grid-template-columns: 1fr 420px; /* 左：設定 / 右：ログ */
+  gap: 32px;
+}
+
+/* 左側（設定） */
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* 右側（ログ） */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   4) 入力欄（黒文字で可読性UP）
+   ========================================================================== */
+.glass-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--control-radius);
+  background: rgba(255,255,255,0.92);
+  color: #0b0b0b;
+  font-size: 13px;
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+  outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.glass-input:focus {
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 0 0 3px rgba(0,157,255,0.35);
+}
+
+/* select の矢印 */
+select.glass-input {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 11px;
+  padding-right: 36px;
+}
+
+/* ==========================================================================
+   5) トグルスイッチ
+   ========================================================================== */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.switch input { display: none; }
+
+.slider {
+  width: 42px;
+  height: 24px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 24px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.slider::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.35);
+}
+
+.switch input:checked + .slider {
+  background: var(--accent-color);
+}
+
+.switch input:checked + .slider::after {
+  transform: translateX(18px);
+}
+
+/* ==========================================================================
+   6) ボタン
+   ========================================================================== */
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.glass-btn {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-color);
+  background: var(--control-bg);
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.15s;
+}
+
+.glass-btn:hover {
+  background: var(--control-bg-hover);
+  transform: translateY(-2px);
+}
+
+.glass-btn.danger {
+  background: rgba(255,59,48,0.25);
+  color: #ff453a;
+}
+
+/* ==========================================================================
+   7) ログ領域（固定高さ＋スクロール＝重なり完全解消）
+   ========================================================================== */
+.glass-log {
+  height: 300px;          /* ← 固定高さ */
+  overflow-y: auto;       /* ← ログが長くてもスクロール */
+  background: rgba(0, 20, 45, 0.45);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 4px 18px rgba(0,0,0,0.4);
+  color: var(--text-dim);
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* スクロールバー（海色） */
+.glass-log::-webkit-scrollbar {
+  width: 6px;
+}
+.glass-log::-webkit-scrollbar-thumb {
+  background: rgba(0,157,255,0.45);
+  border-radius: 10px;
+}

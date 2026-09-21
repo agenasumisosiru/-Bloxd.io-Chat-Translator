@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>翻訳設定</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="glass-panel wide">
+    <div class="left">
+      <h2>翻訳設定</h2>
+
+      <div class="row">
+        <label class="label">翻訳先の言語</label>
+        <select id="langSelect" class="glass-input">
+          <option value="ja">日本語 (Japanese)</option>
+          <option value="en">英語 (English)</option>
+          <option value="ko">韓国語 (Korean)</option>
+          <option value="zh-CN">中国語（簡体） (Chinese - Simplified)</option>
+          <option value="zh-TW">中国語（繁体） (Chinese - Traditional)</option>
+          <option value="fr">フランス語 (French)</option>
+          <option value="de">ドイツ語 (German)</option>
+          <option value="es">スペイン語 (Spanish)</option>
+          <option value="ru">ロシア語 (Russian)</option>
+        </select>
+      </div>
+
+      <div class="row switches">
+        <label class="switch">
+          <input type="checkbox" id="debugMode">
+          <span class="slider"></span>
+          デバッグモード
+        </label>
+
+        <label class="switch">
+          <input type="checkbox" id="pauseProcessing">
+          <span class="slider"></span>
+          翻訳を一時停止
+        </label>
+      </div>
+
+      <div class="row small-inputs">
+        <div>
+          <label class="label">最小翻訳文字数</label>
+          <input id="minLength" type="number" min="1" max="20" class="glass-input small" value="3">
+        </div>
+        <div>
+          <label class="label">スロットル（ms）</label>
+          <input id="throttleMs" type="number" min="10" max="500" class="glass-input small" value="80">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="refreshLogs" class="glass-btn">ログ更新</button>
+        <button id="downloadLogs" class="glass-btn">ログDL</button>
+        <button id="clearLogs" class="glass-btn danger">ログ削除</button>
+      </div>
+    </div>
+
+    <div class="right">
+      <h3>デバッグログ</h3>
+      <div id="logs" class="glass-log" aria-live="polite">(ログは空です)</div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
