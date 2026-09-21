@@ -8,51 +8,58 @@
     <style>
         :root {
             --bg: #f5f5f7;
-            --bg-elevated: rgba(255, 255, 255, 0.7);
-            --panel: rgba(255, 255, 255, 0.72);
-            --panel-strong: #ffffff;
+            --bg-strong: #edf8ef;
+            --panel: rgba(255, 255, 255, 0.7);
+            --panel-strong: rgba(255, 255, 255, 0.9);
             --txt: #1d1d1f;
             --sub: #6e6e73;
-            --border: rgba(0, 0, 0, 0.08);
-            --shadow: rgba(0, 0, 0, 0.08);
-            --cta: #0071e3;
-            --cta-strong: #005ecf;
+            --line: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(20, 60, 30, 0.12);
+            --blue: #0071e3;
+            --blue-strong: #005ecf;
+            --green: #61b069;
             --danger: #ff453a;
-            --danger-bg: rgba(255, 69, 58, 0.08);
-            --success: #34c759;
-            --chip: rgba(0, 113, 227, 0.08);
+            --chip: rgba(0, 113, 227, 0.1);
         }
 
         html[data-theme="dark"] {
             --bg: #000000;
-            --bg-elevated: rgba(22, 22, 23, 0.75);
-            --panel: rgba(28, 28, 30, 0.8);
-            --panel-strong: #1c1c1e;
+            --bg-strong: #111a13;
+            --panel: rgba(28, 28, 30, 0.78);
+            --panel-strong: rgba(30, 30, 30, 0.9);
             --txt: #f5f5f7;
             --sub: #a1a1a6;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.38);
-            --cta: #5ea0ff;
-            --cta-strong: #4e92f6;
-            --danger-bg: rgba(255, 69, 58, 0.12);
+            --line: rgba(255, 255, 255, 0.12);
+            --shadow: rgba(0, 0, 0, 0.42);
+            --blue: #5ea0ff;
+            --blue-strong: #4e92f6;
             --chip: rgba(94, 160, 255, 0.12);
         }
 
         * { box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            background:
+                radial-gradient(ellipse at 85% 0%, rgba(0, 113, 227, 0.16), transparent 26%),
+                radial-gradient(ellipse at 10% 38%, rgba(97, 176, 105, 0.18), transparent 28%),
+                linear-gradient(180deg, #f9fbf9 0%, #eff8f0 42%, var(--bg) 100%);
             color: var(--txt);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
-            background-image: radial-gradient(circle at 80% 15%, rgba(0, 113, 227, 0.12) 0%, transparent 32%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.18;
+            background-image: radial-gradient(rgba(18, 52, 28, 0.14) 0.6px, transparent 0.6px);
+            background-size: 6px 6px;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 72%);
         }
 
         a { color: inherit; }
@@ -62,26 +69,26 @@
         nav {
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: rgba(245, 245, 247, 0.72);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            z-index: 50;
+            background: rgba(245, 245, 247, 0.7);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(26px) saturate(140%);
+            -webkit-backdrop-filter: blur(26px) saturate(140%);
         }
 
         html[data-theme="dark"] nav {
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.62);
         }
 
         .nav-c {
-            max-width: 1060px;
+            max-width: 1080px;
+            height: 64px;
             margin: 0 auto;
-            height: 60px;
-            padding: 0 20px;
+            padding: 0 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 18px;
         }
 
         .brand {
@@ -89,20 +96,18 @@
             align-items: center;
             gap: 10px;
             font-weight: 700;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
         .brand-mark {
-            width: 28px;
-            height: 28px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9px;
-            background: linear-gradient(135deg, var(--cta), #87baff);
-            color: white;
-            font-weight: 700;
-            box-shadow: 0 10px 24px rgba(0, 113, 227, 0.28);
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #8cd7ff, var(--blue));
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(0, 113, 227, 0.3);
         }
 
         .nav-btns {
@@ -112,10 +117,10 @@
         }
 
         .toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.42);
+            border: 1px solid var(--line);
             color: var(--txt);
-            padding: 7px 14px;
+            padding: 8px 14px;
             border-radius: 999px;
             cursor: pointer;
             font-size: 12px;
@@ -125,62 +130,64 @@
 
         .toggle:hover {
             transform: translateY(-1px);
-            border-color: rgba(0, 113, 227, 0.25);
+            border-color: rgba(0, 113, 227, 0.4);
         }
 
         .wrap {
-            max-width: 920px;
-            margin: 36px auto 64px;
-            padding: 0 20px;
+            max-width: 960px;
+            margin: 56px auto 84px;
+            padding: 0 22px;
             animation: up 0.6s ease-out;
         }
 
         .hero {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 26px;
         }
 
         .v-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 6px 12px;
-            border: 1px solid rgba(0, 113, 227, 0.12);
-            background: var(--chip);
-            color: var(--cta);
+            padding: 7px 14px;
             border-radius: 999px;
+            background: var(--chip);
+            color: var(--blue);
+            border: 1px solid rgba(0, 113, 227, 0.2);
             font-size: 12px;
             font-weight: 700;
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
         h1 {
             margin: 0;
-            font-size: clamp(2.2rem, 5vw, 4rem);
-            line-height: 1.05;
-            letter-spacing: -0.05em;
+            font-size: clamp(2.6rem, 7vw, 5.5rem);
+            line-height: 0.94;
+            letter-spacing: -0.08em;
         }
 
         .hero p {
             max-width: 680px;
-            margin: 14px auto 0;
+            margin: 18px auto 0;
             color: var(--sub);
-            font-size: clamp(1rem, 1.5vw, 1.08rem);
+            font-size: clamp(1rem, 1.7vw, 1.16rem);
         }
 
         .stats {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
-            margin: 26px 0 30px;
+            margin: 30px 0;
         }
 
         .stat {
-            padding: 18px 14px;
+            padding: 18px 16px;
             background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: 0 18px 36px var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.9);
+            backdrop-filter: blur(18px) saturate(140%);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
         }
 
         .stat strong {
@@ -196,9 +203,11 @@
 
         .card {
             background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            box-shadow: 0 18px 50px var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 32px;
+            box-shadow: 0 28px 70px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.9);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
             padding: 28px;
         }
 
@@ -207,9 +216,9 @@
             width: 100%;
             height: 340px;
             overflow: hidden;
-            border-radius: 20px;
-            background: rgba(0,0,0,0.02);
-            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: rgba(0,0,0,0.03);
+            border: 1px solid var(--line);
             margin-bottom: 22px;
         }
 
@@ -252,20 +261,20 @@
         }
 
         .btn.primary {
-            background: linear-gradient(135deg, var(--cta), var(--cta-strong));
+            background: linear-gradient(135deg, var(--blue), var(--blue-strong));
             color: #fff;
-            box-shadow: 0 12px 28px rgba(0, 113, 227, 0.28);
+            box-shadow: 0 12px 28px rgba(0, 113, 227, 0.25);
         }
 
         .btn.secondary {
-            background: transparent;
+            background: rgba(255,255,255,0.38);
             color: var(--txt);
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
         }
 
         .warn {
-            background: var(--danger-bg);
-            border: 1px solid rgba(255, 69, 58, 0.18);
+            background: rgba(255, 69, 58, 0.08);
+            border: 1px solid rgba(255, 69, 58, 0.22);
             color: var(--txt);
             padding: 16px 18px;
             border-radius: 16px;
@@ -282,8 +291,8 @@
         h2 {
             margin: 28px 0 12px;
             padding-left: 12px;
-            border-left: 3px solid var(--cta);
-            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            border-left: 3px solid var(--blue);
+            font-size: clamp(1.2rem, 2vw, 1.55rem);
             letter-spacing: -0.03em;
         }
 
@@ -307,15 +316,15 @@
         }
 
         html[data-theme="dark"] code {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
         }
 
         .install-list {
             background: rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
             border-radius: 20px;
             padding: 22px 18px 10px;
-            margin-top: 20px;
+            margin-top: 18px;
         }
 
         #pop-overlay {
@@ -334,7 +343,7 @@
             width: min(440px, 100%);
             padding: 24px 22px 18px;
             background: var(--panel-strong);
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
             border-radius: 22px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
         }
@@ -346,7 +355,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
             background: transparent;
             color: var(--sub);
             font-size: 22px;
@@ -385,7 +394,7 @@
             }
 
             .card {
-                padding: 20px 16px;
+                padding: 18px 16px;
             }
 
             .slide-box {
@@ -430,7 +439,7 @@
         <section class="hero">
             <div class="v-badge" id="versionBadge">Latest: loading...</div>
             <h1>Bloxd Translator</h1>
-            <p class="lang-ja">Google翻訳が対応するほぼ全言語から、日本語・英語・韓国語・中国語・フランス語・ドイツ語・スペイン語・ロシア語へリアルタイム翻訳します。</p>
+            <p class="lang-ja">Google翻訳が対応するほぼ全言語から、日本語・英語・韓国語・中国語・フランス語・ドイツ語・スペイン語・ロシア語へリアルタイムで翻訳します。</p>
             <p class="lang-en">A browser extension that translates nearly all Google-supported languages into Japanese, English, Korean, Chinese, French, German, Spanish, and Russian in real time.</p>
 
             <div class="stats">
@@ -455,11 +464,11 @@
         <section class="card">
             <div class="slide-box" id="slideshow" aria-label="Project preview slideshow">
                 <img src="png1.png" alt="Project screenshot 1" class="active">
-                <img src="preview2.png" alt="Project screenshot 2" onerror="this.src='png2.png'">
+                <img src="png2.png" alt="Project screenshot 2">
             </div>
 
             <div class="cta-row">
-                <a id="releaseLink" href="https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases/latest" target="_blank" rel="noreferrer" class="btn primary lang-ja">最新リリースを開く</a>
+                <a id="releaseLink" href="https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases/latest" target="_blank" rel="noreferrer" class="btn primary lang-ja">最新リリース（loading...）を開く</a>
                 <a id="releaseLinkEn" href="https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases/latest" target="_blank" rel="noreferrer" class="btn primary lang-en">Open Latest Release</a>
                 <a href="#install" class="btn secondary lang-ja">導入方法</a>
                 <a href="#install" class="btn secondary lang-en">How to Install</a>
@@ -468,8 +477,8 @@
             <div class="warn">
                 <strong class="lang-ja">⚠️ 免責事項</strong>
                 <strong class="lang-en">⚠️ Disclaimer</strong>
-                <span class="lang-ja">これは個人開発の趣味プロジェクトです。仕様変更や Google API の制限により、動作停止や一時的な制限が発生する場合があります。作者はその影響について責任を負いません。</span>
-                <span class="lang-en">This is a personal hobby project. Due to specification changes or Google API limits, the extension may stop working or become temporarily restricted. The author is not responsible for any resulting issues.</span>
+                <span class="lang-ja">これは個人開発の趣味プロジェクトです。仕様変更や Google API の制限により、動作停止や一時的な制限が発生する場合があります。</span>
+                <span class="lang-en">This is a personal hobby project. Due to specification changes or Google API limits, the extension may stop working or become temporarily restricted.</span>
             </div>
 
             <h2 class="lang-ja">主な機能</h2>
@@ -521,8 +530,9 @@
         }
 
         function updateReleaseButtons(version) {
-            const textJa = `最新リリース（${version}）を開く`;
-            const textEn = `Open Latest Release (${version})`;
+            const displayVersion = version ?? 'null';
+            const textJa = `最新リリース（${displayVersion}）を開く`;
+            const textEn = `Open Latest Release (${displayVersion})`;
             releaseLink.textContent = textJa;
             releaseLinkEn.textContent = textEn;
             releaseLink.href = releaseUrl;
@@ -532,17 +542,19 @@
         async function fetchLatestVersion() {
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
-                    headers: { Accept: 'application/vnd.github+json' }
+                    headers: { Accept: 'application/vnd.github+json' },
+                    cache: 'no-store'
                 });
 
                 if (!res.ok) throw new Error('Release fetch failed');
                 const data = await res.json();
-                const version = data.tag_name || 'latest';
-                document.getElementById('versionBadge').textContent = `Latest: ${version}`;
+                const version = data.tag_name || null;
+                document.getElementById('versionBadge').textContent = `Latest: ${version ?? 'null'}`;
                 updateReleaseButtons(version);
             } catch (error) {
-                document.getElementById('versionBadge').textContent = 'Latest: 1.3.2.1';
-                updateReleaseButtons('1.3.2.1');
+                console.warn(error);
+                document.getElementById('versionBadge').textContent = 'Latest: null';
+                updateReleaseButtons(null);
             }
         }
 
@@ -561,7 +573,7 @@
         setLanguage('ja');
 
         if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
-            document.getElementById('pop-overlay').style.display = 'flex';
+            document.getElementById('pop-overlay').style.display = 'grid';
         }
 
         document.getElementById('popX').addEventListener('click', () => {
@@ -576,7 +588,7 @@
                 images[currentIndex].classList.remove('active');
                 currentIndex = (currentIndex + 1) % images.length;
                 images[currentIndex].classList.add('active');
-            }, 3000);
+            }, 3500);
         }
 
         fetchLatestVersion();
