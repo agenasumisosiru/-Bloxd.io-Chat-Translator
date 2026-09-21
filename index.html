@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloxd Translator</title>
+    <style>
+        :root {
+            --bg: #f5f5f7; --txt: #1d1d1f; --sub: #6e6e73; --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.4); --shadow: rgba(0,0,0,0.04); --cta: #0071e3;
+        }
+        [data-theme="dark"] {
+            --bg: #000; --txt: #f5f5f7; --sub: #86868b; --border: rgba(255,255,255,0.1);
+            --glass: rgba(22,22,23,0.5); --shadow: rgba(0,0,0,0.4);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg); color: var(--txt); line-height: 1.6; -webkit-font-smoothing: antialiased;
+            background-image: radial-gradient(circle at 80% 20%, rgba(0,113,227,0.05) 0%, transparent 40%);
+        }
+        nav {
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            width: 100%; height: 48px; position: fixed; top: 0; z-index: 99; border-bottom: 1px solid var(--border);
+        }
+        .nav-c { max-width: 1024px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 12px; }
+        .toggle { background: var(--glass); border: 1px solid var(--border); color: var(--txt); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; }
+        .wrap { max-width: 800px; margin: 90px auto 40px; padding: 0 20px; animation: up 0.6s ease-out; }
+        .hero { text-align: center; margin-bottom: 30px; }
+        .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
+        .hero p { color: var(--sub); font-size: 18px; }
+        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); box-shadow: 0 20px 40px var(--shadow); border-radius: 24px; padding: 30px; }
+        
+        /* 🎞️ スライドショーレイアウト崩れ・不具合の厳重警戒ガード */
+        .slide-box { width: 100%; height: 320px; background: rgba(0,0,0,0.02); border-radius: 16px; margin: 20px 0; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); position: relative; }
+        .slide-box img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; }
+        .slide-box img.active { opacity: 1; z-index: 2; }
+        
+        .btn { background: var(--cta); color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 22px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,113,227,0.2); }
+        .btn:hover { transform: scale(1.02); }
+        .warn { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); padding: 15px; border-radius: 14px; margin: 20px 0; font-size: 13px; }
+        h2 { font-size: 20px; margin: 25px 0 10px; border-left: 3px solid var(--cta); padding-left: 8px; }
+        ul, ol { padding-left: 20px; font-size: 14px; }
+        li { margin-bottom: 6px; }
+        
+        /* 📱 デバイス検知・遮断画面 */
+        #blocker { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; color: #fff; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        #blocker h1 { font-size: 28px; margin-bottom: 10px; color: #ff453a; }
+        @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="blocker">
+        <h1>PC専用ページ</h1>
+        <p>この拡張機能はPCブラウザ専用です。<br>WindowsまたはMacからアクセスしてください。</p>
+    </div>
+
+    <nav>
+        <div class="nav-c">
+            <strong>-Bloxd.io-Chat-Translator</strong>
+            <button class="toggle" id="modeBtn">ダークモード</button>
+        </div>
+    </nav>
+
+    <div class="wrap">
+        <section class="hero">
+            <h1>Bloxd Translator</h1>
+            <p>Bloxd.ioのチャットを自動で日本語に翻訳するChrome拡張機能</p>
+        </section>
+
+        <main class="card">
+            <!-- 🎞️ 確定された画像パスによる自動スライドショー -->
+            <div class="slide-box" id="slideshow">
+                <img src="png1.png" alt="翻訳画面 1" class="active">
+                <img src="png2.png" alt="翻訳画面 2">
+            </div>
+
+            <div style="text-align: center;">
+                <a href="https://github.com" target="_blank" class="btn">最新リリースを別タブで開く</a>
+            </div>
+
+            <div class="warn">
+                <strong style="color:#ff453a; display:block; margin-bottom:4px;">⚠️ 免責事項 (Warning)</strong>
+                個人開発の趣味プロジェクトのため、仕様変更による動作停止やメンテナンス終了の可能性があります。本ソフトウェアの使用によって生じた損害について、作者は一切の責任を負いません。
+            </div>
+
+            <h2>主な機能</h2>
+            <ul>
+                <li>Bloxd.io 内の海外チャットを自動でリアルタイム日本語翻訳。</li>
+                <li>Google翻訳APIの上限により、一時的に翻訳制限がかかる場合があります。</li>
+            </ul>
+
+            <h2>導入手順 (開発者モード)</h2>
+            <ol>
+                <li>リポジトリのReleasesから <strong>ZIPファイルをダウンロード</strong></li>
+                <li>PC上で <strong>ZIPファイルを解凍</strong></li>
+                <li>ブラウザで <code>chrome://extensions/</code> を開き <strong>デベロッパーモードをオン</strong></li>
+                <li>解凍したフォルダを画面に <strong>ドラッグ＆ドロップ</strong> して完了</li>
+            </ol>
+        </main>
+    </div>
+
+    <script>
+        // スマホ・タブレット検知（合致した場合は強制遮断）
+        if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+            document.getElementById('blocker').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 3秒周期フェードスライドショー
+        const imgs = document.querySelectorAll('#slideshow img');
+        let idx = 0;
+        if(imgs.length > 1) {
+            setInterval(() => {
+                imgs[idx].classList.remove('active');
+                idx = (idx + 1) % imgs.length;
+                imgs[idx].classList.add('active');
+            }, 3000);
+        }
+
+        // モード切り替え
+        const btn = document.getElementById('modeBtn');
+        const setMode = (t) => {
+            document.documentElement.setAttribute('data-theme', t);
+            btn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';
+            localStorage.setItem('theme', t);
+        }
+        btn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+        setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    </script>
+</body>
+</html>
