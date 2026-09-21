@@ -1,44 +1,45 @@
-# -Bloxd.io-Chat-Translator
-仕様変更で動かなくなる場合があります。
-Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
+># -Bloxd.io-Chat-Translator
+>仕様変更で動かなくなる場合があります。
+>Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 
-[!WARNING]
-もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
+> [!WARNING]
+> もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
 個人が趣味で開発しているため飽きたら開発終了します。
 
 
 
 
-ON/OFF の切り替えも可能です。
 
-対応ブラウザ:chromeなどのchronium系ブラウザ
-動作確認はchrome、brave、vivaldiでしております。
+>ON/OFF の切り替えも可能です。
 
- 主な機能
+>対応ブラウザ:chromeなどのchronium系ブラウザ
+>動作確認はchrome、brave、vivaldiでしております。
 
-Bloxd.io のチャットメッセージを自動で日本語に翻訳
+> 主な機能
+
+>Bloxd.io のチャットメッセージを自動で日本語に翻訳
 
 ---
 
 
-  インストール方法（開発者モード）
+  >インストール方法（開発者モード）
 
 
-1. このリポジトリのリリースをおしてそこからzipをダウンロード 
+>1. このリポジトリのリリースをおしてそこからzipをダウンロード 
 
-2. zipを解凍する
+>2. zipを解凍する
 
-3. Chronium系ブラウザ（chrome、edge、braveなど） で `chrome://extensions/` を開いてデペロッパーモードをオン 
+>3. Chronium系ブラウザ（chrome、edge、braveなど） で `chrome://extensions/` を開いてデペロッパーモードをオン 
 
-4. そこにファイルをドラッグします  
+>4. そこにファイルをドラッグします  
 
-5. そうすると読み込まれます。
+>5. そうすると読み込まれます。
 
 ---注意事項----
 
- Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください
+> Google 翻訳apiを使用しているため上限に達することがあります。ご了承ください
 
-ライセンス
+>ライセンス
 MIT License
 
 Copyright (c) 2026 agenasunomisosiru
