@@ -4,8 +4,8 @@ Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機�
 
 > [!WARNING]
 > もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
-> Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.
-> 個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。
+>  個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.
+>
 
 
 >対応ブラウザ:chromeなどのchronium系ブラウザ
