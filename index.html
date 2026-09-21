@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +23,14 @@
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             width: 100%; height: 48px; position: fixed; top: 0; z-index: 99; border-bottom: 1px solid var(--border);
         }
-        .nav-c { max-width: 1024px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 12px; gap: 8px; }
+        .nav-c { max-width: 1024px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 12px; }
         .nav-btns { display: flex; gap: 8px; }
         .toggle { background: var(--glass); border: 1px solid var(--border); color: var(--txt); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; }
         .wrap { max-width: 800px; margin: 90px auto 40px; padding: 0 20px; animation: up 0.6s ease-out; }
         
+        /* 最新バージョンバナー */
         .hero { text-align: center; margin-bottom: 30px; }
-        .v-badge { display: inline-block; background: var(--border); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--cta); opacity: 0; transition: opacity 0.3s; }
+        .v-badge { display: inline-block; background: var(--border); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--cta); }
         .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
         .hero p { color: var(--sub); font-size: 16px; max-width: 600px; margin: 0 auto; }
         
@@ -45,6 +46,7 @@
         ul, ol { padding-left: 20px; font-size: 14px; }
         li { margin-bottom: 6px; }
         
+        /* 💬 ポップアップスタイル */
         #pop-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
         .pop-box { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 35px 25px 25px; border-radius: 20px; max-width: 400px; width: 100%; text-align: center; position: relative; animation: up 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
         .pop-close { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--sub); font-weight: 300; line-height: 1; }
@@ -53,10 +55,13 @@
         .pop-box p { font-size: 14px; color: var(--txt); margin-bottom: 15px; }
         @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        [data-lang="en"] .lang-ja, [data-lang="ja"] .lang-en { display: none; }
+        /* 🌐 完璧な言語切り替え（表示・非表示の完全分離） */
+        html[data-lang="ja"] .lang-en { display: none !important; }
+        html[data-lang="en"] .lang-ja { display: none !important; }
     </style>
 </head>
 <body>
+    <!-- 忠告ポップアップ -->
     <div id="pop-overlay">
         <div class="pop-box">
             <button class="pop-close" id="popX">&times;</button>
@@ -79,8 +84,8 @@
 
     <div class="wrap">
         <section class="hero">
-            <!-- 🔄 JSでGitHub APIから取得した最新タグがここに入ります -->
-            <div class="v-badge" id="versionBadge">Latest: Loading...</div>
+            <!-- 👑 最上部に大きく固定配置される最新バージョンバナー -->
+            <div class="v-badge" id="versionBadge">Latest: 1.3.2.1</div>
             <h1>Bloxd Translator</h1>
             <p class="lang-ja">Google翻訳が対応するほぼ全言語から、日本語・英語・韓国語・中国語・フランス語・ドイツ語・スペイン語・ロシア語へ翻訳するChrome拡張機能</p>
             <p class="lang-en">Chrome extension that translates from nearly all Google-supported languages into Japanese, English, Korean, Chinese, French, German, Spanish, and Russian.</p>
@@ -93,8 +98,8 @@
             </div>
 
             <div style="text-align: center;">
-                <a href="https://github.com" target="_blank" class="btn lang-ja" id="btnJa">最新リリースを別タブで開く</a>
-                <a href="https://github.com" target="_blank" class="btn lang-en" id="btnEn">Open Latest Release in New Tab</a>
+                <a href="https://github.com" target="_blank" class="btn lang-ja" id="btnJa">最新リリース（1.3.2.1）を別タブで開く</a>
+                <a href="https://github.com" target="_blank" class="btn lang-en" id="btnEn">Open Latest Release (1.3.2.1) in New Tab</a>
             </div>
 
             <div class="warn">
@@ -128,19 +133,19 @@
     </div>
 
     <script>
-        // 🔄 GitHub APIから最新のリリースバージョンを取得する最軽量処理
+        // GitHub API自動更新（文言混ざりバグを徹底ガード）
         async function fetchLatestVersion() {
             try {
                 const res = await fetch('https://github.com');
                 if (res.ok) {
                     const data = await res.json();
-                    const v = data.tag_name || 'v1.3.2'; // 万が一タグが空ならv1.3.2を身代わりに
-                    const badge = document.getElementById('versionBadge');
-                    badge.textContent = `Latest: ${v}`;
-                    badge.style.opacity = '1';
+                    const v = data.tag_name || '1.3.2.1';
+                    document.getElementById('versionBadge').textContent = `Latest: ${v}`;
                     document.getElementById('btnJa').textContent = `最新リリース（${v}）を別タブで開く`;
                     document.getElementById('btnEn').textContent = `Open Latest Release (${v}) in New Tab`;
                 }
-            } catch (e) {
-                // オフラインやエラー時は標準テキストを表示
-                document.getElementById('versionBadge').textContent = 'Latest: v1.3.2';document.getElementById('versionBadge').style.opacity = '1';}}fetchLatestVersion();if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){document.getElementById('pop-overlay').style.display = 'flex';}document.getElementById('popX').addEventListener('click', () => {document.getElementById('pop-overlay').style.display = 'none';});const imgs = document.querySelectorAll('#slideshow img');let idx = 0;if(imgs.length > 1) {setInterval(() => {imgs[idx].classList.remove('active');idx = (idx + 1) % imgs.length;imgs[idx].classList.add('active');}, 3000);}const langBtn = document.getElementById('langBtn');const setLang = (l) => {document.documentElement.setAttribute('data-lang', l);langBtn.textContent = l === 'en' ? '日本語' : 'English';localStorage.setItem('lang', l);}langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));setLang(localStorage.getItem('lang') || 'ja');const modeBtn = document.getElementById('modeBtn');const setMode = (t) => {document.documentElement.setAttribute('data-theme', t);modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';localStorage.setItem('theme', t);}modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+            } catch (e) {}
+        }
+        fetchLatestVersion();
+        if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){document.getElementById('pop-overlay').style.display = 'flex';}document.getElementById('popX').addEventListener('click', () => {document.getElementById('pop-overlay').style.display = 'none';});const imgs = document.querySelectorAll('#slideshow img');let idx = 0;if(imgs.length > 1) {setInterval(() => {imgs[idx].classList.remove('active');idx = (idx + 1) % imgs.length;imgs[idx].classList.add('active');}, 3000);}const langBtn = document.getElementById('langBtn');const setLang = (l) => {document.documentElement.setAttribute('data-lang', l);langBtn.textContent = l === 'en' ? '日本語' : 'English';localStorage.setItem('lang', l);}langBtn.addEventListener('click', () => setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'ja' : 'en'));setLang(localStorage.getItem('lang') || 'ja');const modeBtn = document.getElementById('modeBtn');const setMode = (t) => {document.documentElement.setAttribute('data-theme', t);modeBtn.textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';localStorage.setItem('theme', t);}modeBtn.addEventListener('click', () => setMode(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));setMode(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
