@@ -136,7 +136,7 @@
         <h1>Bloxd.io Chat Translator</h1>
         <p>
           ここがメインのページです。<br />
-          ポップアップは「閉じる」ボタンで閉じられます。
+          ポップアップは30秒後に自動で閉じます。
         </p>
       </div>
     </main>
@@ -144,19 +144,26 @@
     <script>
       const popup = document.getElementById('popup');
       const closePopupBtn = document.getElementById('closePopup');
+      let hideTimer = null;
 
       function hidePopup() {
         popup.classList.add('hidden');
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+        }
       }
 
       closePopupBtn.addEventListener('click', hidePopup);
 
-      // モバイルではEscキーがないのでボタンのみで閉じられる設計にしています
       popup.addEventListener('click', (event) => {
         if (event.target === popup) {
           hidePopup();
         }
       });
+
+      hideTimer = setTimeout(() => {
+        hidePopup();
+      }, 30000);
     </script>
   </body>
 </html>
