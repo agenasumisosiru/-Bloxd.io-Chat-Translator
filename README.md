@@ -3,14 +3,12 @@
 Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 <nobr><table border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ctr.stylemap.co.jp/"><img src="https://www.f-counter.net/ani1/68/1790315882/" alt="無料アクセスカウンター" border="0" style="margin:0px; padding:0px; border:0px; vertical-align:bottom"></a></td>
 <td><a href="https://ctr.stylemap.co.jp/"><img src="https://www.f-counter.net/ani2/68/1790315882/" alt="無料アクセスカウンター" border="0" style="margin:0px; padding:0px; border:0px; vertical-align:bottom"></a></td></tr></tbody></table></nobr>
-> [!WARNING]作者は金欠のためウイルスを入れるかもしれません　The author may include a virus because he is short of money.
 
 https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases
 
-
 > [!WARNING]
 > もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
->  個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.
+>  個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.作者は金欠のためウイルスを入れるかもしれません　The author may include a virus because he is short of money.
 >
 
 
