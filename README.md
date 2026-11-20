@@ -1,5 +1,9 @@
 ># -Bloxd.io-Chat-Translator
 No matter what happens, you are responsible.
+> [!WARNING]
+> No matter what happens, you are responsible.何があっても自己責任で使って。
+>
+
 
 
 
@@ -16,13 +20,7 @@ Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機�
 
 https://github.com/agenasumisosiru/-Bloxd.io-Chat-Translator/releases
 
-> [!WARNING]
-> もしこのソフトウェアで損じた損害を作者は負いません。The author will not be responsible for any damage caused by this software.
->  個人が趣味で開発しているため、飽きたりメンテナンスが難しくなったりすると開発を終了します。Since it is developed by individuals as a hobby, development ends when it becomes boring or difficult to maintain.作者は金欠のためウイルスを入れるかもしれません　The author may include a virus because he is short of money.
->
-
-
->対応ブラウザ:chromeなどのchronium系ブラウザ
+対応ブラウザ:chromeなどのchronium系ブラウザ
 >動作確認はchrome、brave、vivaldiでしております。
 
 > 主な機能
