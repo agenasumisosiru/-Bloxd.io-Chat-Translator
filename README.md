@@ -1,4 +1,14 @@
 ># -Bloxd.io-Chat-Translator
+No matter what happens, you are responsible.
+
+
+
+
+
+
+
+
+
 仕様変更で動かなくなる場合があります。
 Bloxd.io のチャットを 自動で日本語に翻訳する Chrome 拡張機能です。
 <nobr><table border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ctr.stylemap.co.jp/"><img src="https://www.f-counter.net/ani1/68/1790315882/" alt="無料アクセスカウンター" border="0" style="margin:0px; padding:0px; border:0px; vertical-align:bottom"></a></td>
